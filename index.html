@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Diagnóstico 4Rs: índice de maturidade de gestão em cinco dimensões, por Leonardo Mattos e Int.Co.">
+<title>Diagnóstico 4Rs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=Public+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: coluna única de leitura, um bloco do método por etapa, resultado com radar ao final */
+:root{
+  --bg:#f3f4f5; --surface:#ffffff; --fg:#161b21; --muted:#5b636c; --line:#d9dde1;
+  --accent:#a8603a; --accent-ink:#ffffff; --accent-soft:#f4e7df; --ink:#141517;
+  --warn:#9a4a26; --warn-soft:#f6e7df;
+  --hero-fg:#f2efe9; --hero-sub:#e2ddd5; --hero-line:#4a4b50; --hero-accent:#d08a62;
+  --display:"Newsreader", Georgia, "Times New Roman", serif;
+  --body:"Public Sans", "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121417; --surface:#1b1e22; --fg:#eceae6; --muted:#a3a7ad; --line:#30343a;
+  --accent:#d08a62; --accent-ink:#141517; --accent-soft:#3a2a21; --ink:#0c0d0f;
+  --warn:#e3a07c; --warn-soft:#3a2820; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121417; --surface:#1b1e22; --fg:#eceae6; --muted:#a3a7ad; --line:#30343a;
+  --accent:#d08a62; --accent-ink:#141517; --accent-soft:#3a2a21; --ink:#0c0d0f;
+  --warn:#e3a07c; --warn-soft:#3a2820; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;padding-inline:16px;padding-block:0 56px;margin:0}
+.top{background:var(--ink);color:var(--hero-fg);margin-inline:-16px;padding:36px 16px 32px}
+.top .in{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--hero-accent);font-weight:500}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(36px,6vw,54px);line-height:1.02;margin:0;text-wrap:balance}
+.lede{font-family:var(--display);font-style:italic;font-size:20px;color:var(--hero-sub);margin:0;max-width:56ch}
+.phases{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.phases span{border:1px solid var(--hero-line);border-radius:99px;padding:3px 12px;font-size:13px;color:var(--hero-fg)}
+main{max-width:760px;margin:28px auto 0;display:flex;flex-direction:column;gap:20px}
+.progress{display:flex;flex-direction:column;gap:8px}
+.progress .lab{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.track{height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.fill{height:100%;background:var(--accent);width:0;transition:width .25s}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:22px}
+h2{font-family:var(--display);font-weight:500;font-size:30px;margin:0;line-height:1.1}
+.step-intro{color:var(--muted);margin:-12px 0 0;max-width:60ch}
+.q{display:flex;flex-direction:column;gap:10px;border:0;margin:0;padding:0;min-width:0}
+.q legend{font-weight:600;font-size:17px;padding:0;margin-bottom:10px;line-height:1.4}
+.q legend .n{color:var(--accent);font-variant-numeric:tabular-nums;margin-right:6px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start;border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer;background:var(--surface)}
+.opt:hover{border-color:var(--accent)}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .num{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:13px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+.opt .txt{font-size:15px}
+.opt:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.opt:has(input:checked) .num{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.opt:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:560px){.fields{grid-template-columns:minmax(0,1fr)}}
+label.f{display:flex;flex-direction:column;gap:6px;font-size:14px;color:var(--muted)}
+input[type=text],input[type=email],select{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-width:0}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--muted)}
+.check input{margin-top:4px;accent-color:var(--accent)}
+.privacy{font-size:13px;color:var(--muted);background:var(--bg);border-radius:8px;padding:12px 14px;margin:0}
+.nav{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+button{font:inherit;font-weight:600;border-radius:8px;padding:12px 20px;cursor:pointer;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink)}
+button.ghost{background:transparent;color:var(--fg);border-color:var(--line)}
+button[disabled]{opacity:.55;cursor:wait}
+.err{color:var(--warn);background:var(--warn-soft);border-radius:8px;padding:10px 14px;font-size:14px;margin:0}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+/* resultado */
+.res-head{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end;justify-content:space-between}
+.idx{font-family:var(--display);font-size:84px;line-height:.9;font-variant-numeric:tabular-nums}
+.idx small{font-size:24px;color:var(--muted)}
+.lvl{display:flex;flex-direction:column;gap:4px;max-width:32ch}
+.lvl strong{font-size:19px}
+.lvl span{color:var(--muted);font-size:15px}
+.res-grid{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:20px;align-items:center}
+@media (max-width:640px){.res-grid{grid-template-columns:minmax(0,1fr)}}
+svg{max-width:100%;height:auto;display:block}
+.bars{display:flex;flex-direction:column;gap:12px}
+.bar{display:flex;flex-direction:column;gap:4px}
+.bar .row{display:flex;justify-content:space-between;font-size:14px;font-variant-numeric:tabular-nums}
+.bar .t{height:6px;background:var(--line);border-radius:6px;overflow:hidden}
+.bar .v{height:100%;background:var(--accent);border-radius:6px}
+.bar.weak .v{background:var(--warn)}
+.bar.weak .row b{color:var(--warn)}
+.weakest{border-left:3px solid var(--warn);padding:4px 0 4px 14px;margin:0;font-size:16px}
+.next{background:var(--accent-soft);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.next p{margin:0}
+a.cta{display:inline-block;text-decoration:none;font-weight:600;border-radius:8px;padding:12px 20px;background:var(--accent);color:var(--accent-ink);align-self:flex-start}
+.note{font-size:13px;color:var(--muted);margin:0}
+footer{max-width:760px;margin:28px auto 0;font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+</head>
+<body>
+
+
+<header class="top">
+  <div class="in">
+    <span class="eyebrow">Estratégia · Foresight · Comercial</span>
+    <h1>Diagnóstico 4Rs</h1>
+    <p class="lede">Em oito minutos, um retrato de onde sua empresa trava o crescimento.</p>
+    <div class="phases" aria-hidden="true"><span>Re.visão</span><span>Realidade</span><span>Reação</span><span>Robustez</span><span>Inovação e Tecnologia</span></div>
+  </div>
+</header>
+
+<main>
+  <div class="progress" id="progress">
+    <div class="lab"><span id="stepName">Identificação</span><span id="stepCount">Etapa 1 de 6</span></div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+  </div>
+
+  <form class="card" id="form" novalidate autocomplete="on">
+    <div id="stepHost"></div>
+    <p class="err" id="err" hidden></p>
+    <div class="hp" aria-hidden="true"><label>Não preencha<input type="text" id="website" tabindex="-1" autocomplete="off"></label></div>
+    <div class="nav">
+      <button type="button" class="ghost" id="back" hidden>Voltar</button>
+      <button type="submit" id="next">Começar</button>
+    </div>
+  </form>
+
+  <section class="card" id="result" hidden aria-live="polite">
+    <div class="res-head">
+      <div>
+        <span class="eyebrow" style="color:var(--accent)">Índice de maturidade</span>
+        <div class="idx" id="rIdx">0<small> /100</small></div>
+      </div>
+      <div class="lvl"><strong id="rLvl"></strong><span id="rLvlTxt"></span></div>
+    </div>
+    <div class="res-grid">
+      <svg id="radar" viewBox="0 0 340 320" role="img" aria-label="Radar dos cinco blocos do Diagnóstico 4Rs"></svg>
+      <div class="bars" id="bars"></div>
+    </div>
+    <p class="weakest" id="rWeak"></p>
+    <div class="next">
+      <p><strong>Em até 3 dias úteis você recebe o parecer completo:</strong> situação atual, problemas prioritários, o que acontece se nada mudar e o primeiro passo recomendado.</p>
+      <a class="cta" id="cta" href="#" target="_blank" rel="noopener" hidden>Agendar conversa de 30 minutos</a>
+      <p class="note" id="sendNote"></p>
+    </div>
+  </section>
+</main>
+
+<footer>Leonardo Mattos · Int.Co · Belo Horizonte. Método 4Rs, desenvolvido pela Int.Co.</footer>
+
+<script>
+/* ===== CONFIGURAÇÃO ===== */
+const CONFIG = {
+  endpoint: "https://script.google.com/macros/s/AKfycbyFNWR7XEvtIE72ei5Kw4-iQe9QYR8lwdV4F2ZBxZA98DIxLVIKPLOqVMkeJEAIjipO/exec",
+  agendaUrl: ""   // link de agendamento (Google Agenda ou Calendly); vazio esconde o botão
+};
+
+const BLOCKS=[
+ {id:"RV",name:"Re.visão",sub:"Diagnóstico",intro:"Como a diretoria enxerga a realidade do negócio.",frase:"decisões ainda partem de versões diferentes da realidade."},
+ {id:"RL",name:"Realidade",sub:"Plano",intro:"Como o plano e as metas são construídos e usados.",frase:"o plano existe, mas não governa a rotina."},
+ {id:"RE",name:"Reação",sub:"Execução",intro:"Como o plano vira resultado no dia a dia.",frase:"a execução depende de pessoas, não de cadência."},
+ {id:"RB",name:"Robustez",sub:"Governança",intro:"Como a empresa decide, testa e se prepara para o futuro.",frase:"o futuro da empresa ainda passa por uma única cabeça."},
+ {id:"IT",name:"Inovação e Tecnologia",sub:"Capacidade",intro:"Como a tecnologia entra na gestão e no plano.",frase:"a tecnologia ainda é custo; não virou capacidade."}
+];
+const Q=[
+ ["Quando a diretoria discute um problema, quanto custa chegar a um acordo sobre o que realmente está acontecendo?",["Não se chega a acordo; cada diretor mantém sua versão.","O acordo vem depois de dias de discussão, quase sempre pela palavra do dono.","Há acordo na maioria dos temas, mas os números são conferidos na própria reunião.","O acordo é rápido; divergências se resolvem com dados.","A discussão parte dos mesmos dados; o debate é sobre o que fazer."]],
+ ["Com que frequência decisões relevantes são tomadas sem dado que as sustente?",["Quase sempre; decide-se pela experiência do dono.","Na maioria das vezes; os dados aparecem depois, para justificar.","Metade das vezes; depende do tema e de quem decide.","Raramente; decisões importantes pedem algum dado.","Nunca nas decisões relevantes; toda decisão tem evidência registrada."]],
+ ["A empresa sabe hoje onde está perdendo margem?",["Não sabe; descobre pelo contador ou quando falta caixa.","Descobre no fechamento do mês, sem saber a causa.","Descobre no fechamento e identifica a causa depois.","Acompanha a margem por produto ou cliente ao longo do mês.","Identifica o vazamento enquanto ocorre e age na mesma semana."]],
+ ["O planejamento do ano é usado nas reuniões de rotina?",["Não existe planejamento formal.","Existe, mas fica na gaveta depois de aprovado.","É revisitado algumas vezes no ano, geralmente em momento de crise.","É consultado nas reuniões mensais, com alguns indicadores.","Pauta as reuniões mensais; cada objetivo tem indicador e dono."]],
+ ["Como as metas de venda são definidas?",["Não há meta formal.","Percentual de crescimento escolhido pela diretoria.","Resultado do ano anterior mais um percentual.","Histórico, sazonalidade e metas por produto ou região.","Cálculo com histórico, sazonalidade, funil e capacidade, revisado ao longo do ano."]],
+ ["Seus clientes percebem diferença clara entre vocês e os concorrentes?",["Não; competimos quase só por preço.","Pouca; a diferença está no relacionamento pessoal do dono.","Em alguns produtos ou clientes, não no todo.","Sim, na maioria dos clientes, mas sem medir.","Sim, reconhecida, medida e defendida sem precisar baixar preço."]],
+ ["Quanto das vendas depende de uma ou duas pessoas específicas?",["Quase tudo; sem elas, as vendas param.","A maior parte; os principais clientes são delas.","Metade; há equipe, mas os grandes negócios passam por poucos.","Pouco; existe processo, com algumas contas-chave concentradas.","Nada crítico; o processo funciona com qualquer pessoa treinada."]],
+ ["Os projetos prioritários têm dono, prazo e critério de sucesso?",["Não há lista de projetos prioritários.","Há lista, mas sem dono ou prazo claros.","Têm dono e prazo, mas mudam sem registro.","Têm dono, prazo e critério, com acompanhamento irregular.","Têm dono, prazo e critério, acompanhados em cadência fixa."]],
+ ["Com que antecedência vocês sabem se a meta do mês será batida?",["Só depois do fechamento.","No último dia do mês.","Na última semana.","Na segunda quinzena, com pouco tempo para corrigir.","Na primeira quinzena, com tempo para corrigir."]],
+ ["Se o dono se afastar por 30 dias, o que acontece com as decisões?",["Param; tudo espera a volta dele.","Só as operacionais seguem; o resto espera.","Seguem por telefone, com o dono decidindo à distância.","Seguem com a diretoria, com poucas exceções.","Seguem pelos ritos e alçadas definidos, sem depender dele."]],
+ ["Como a empresa testa ideias novas antes de investir pesado?",["Não testa; aposta direto.","Testa informalmente, sem critério de sucesso.","Faz pilotos, mas raramente decide parar um.","Faz testes pequenos com critério definido.","Testa pequeno, com verba limitada, critério para continuar ou parar e aprendizado registrado."]],
+ ["A empresa acompanha mudanças de mercado que podem afetar os próximos três anos?",["Não; reage quando o impacto chega.","De forma informal, pelo que o dono lê ou ouve.","Discute tendências só no planejamento anual.","Monitora sinais periodicamente e discute em reunião.","Monitora sinais, revisa cenários e ajusta o plano quando necessário."]],
+ ["Como a empresa usa tecnologia na gestão (sistemas, CRM, indicadores, IA)?",["Planilhas e controles manuais.","Sistema básico, financeiro ou ERP, sem integração.","ERP e algum CRM ou relatório, com retrabalho manual.","Sistemas integrados e painel de indicadores em uso.","Sistemas integrados, painel atualizado e análise avançada ou IA nas decisões."]],
+ ["Inovação e tecnologia estão no planejamento da empresa?",["Não aparecem.","Aparecem como intenção, sem verba.","Têm verba, decidida caso a caso.","Têm objetivos e verba anual definidos.","Têm objetivos, dono, verba e acompanhamento, como qualquer projeto estratégico."]],
+ ["A tecnologia adotada gera resultado mensurável?",["Não sabemos; é vista como despesa.","Percebemos algum benefício, sem medir.","Medimos em alguns projetos.","Medimos o retorno da maior parte dos investimentos.","Todo investimento tem retorno medido, e o resultado orienta os próximos."]]
+];
+const LEVELS=[[20,"Nível 1: Dependente","A empresa funciona pelo esforço do dono."],[40,"Nível 2: Reativo","Há iniciativas, mas sem método comum."],[60,"Nível 3: Estruturado em partes","Algumas áreas têm processo; o todo ainda não conversa."],[80,"Nível 4: Sistêmico","Plano, execução e dados se conectam na rotina."],[100,"Nível 5: Perene","A gestão funciona sem depender de uma pessoa."]];
+
+const state={step:0,id:{nome:"",email:"",empresa:"",cidade:"",fat:"",fdc:"",lgpd:false},a:Array(15).fill(0)};
+const $=id=>document.getElementById(id);
+const TOTAL=6;
+
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+
+function renderStep(){
+  const host=$("stepHost"); $("err").hidden=true;
+  const s=state.step;
+  $("fill").style.width=((s)/TOTAL*100)+"%";
+  $("stepCount").textContent=`Etapa ${s+1} de ${TOTAL}`;
+  $("back").hidden=s===0;
+  $("next").textContent=s===0?"Começar":(s===TOTAL-1?"Ver meu resultado":"Continuar");
+  if(s===0){
+    $("stepName").textContent="Identificação";
+    const i=state.id;
+    host.innerHTML=`<h2>Antes de começar</h2>
+    <p class="step-intro">15 perguntas em cinco blocos. Responda pelo que acontece na prática, não pelo que deveria acontecer.</p>
+    <div class="fields">
+      <label class="f">Nome e cargo<input type="text" id="i_nome" autocomplete="name" value="${esc(i.nome)}"></label>
+      <label class="f">E-mail<input type="email" id="i_email" autocomplete="email" value="${esc(i.email)}"></label>
+      <label class="f">Empresa<input type="text" id="i_empresa" autocomplete="organization" value="${esc(i.empresa)}"></label>
+      <label class="f">Cidade<input type="text" id="i_cidade" value="${esc(i.cidade)}"></label>
+      <label class="f">Faturamento anual<select id="i_fat">${["","Até R$ 10 milhões","R$ 10 a 50 milhões","R$ 50 a 150 milhões","Acima de R$ 150 milhões"].map(o=>`<option value="${o}" ${o===i.fat?"selected":""}>${o||"Selecione"}</option>`).join("")}</select></label>
+      <label class="f">Nos últimos três anos, sua empresa participou de algum programa da Fundação Dom Cabral conduzido por Leonardo Mattos?<select id="i_fdc">${["","Não","Sim"].map(o=>`<option value="${o}" ${o===i.fdc?"selected":""}>${o||"Selecione"}</option>`).join("")}</select></label>
+    </div>
+    <p class="privacy">Seus dados são usados apenas para gerar o resultado, enviar o parecer e agendar a conversa sobre ele. Ficam guardados pela Int.Co por até 24 meses e não são compartilhados com terceiros. Para corrigir ou excluir seus dados, responda ao e-mail do resultado.</p>
+    <label class="check"><input type="checkbox" id="i_lgpd" ${i.lgpd?"checked":""}><span>Li e autorizo o uso dos meus dados nos termos acima (LGPD).</span></label>`;
+    setTimeout(()=>$("i_nome").focus(),0);
+  } else {
+    const bi=s-1, bl=BLOCKS[bi];
+    $("stepName").textContent=bl.name;
+    let h=`<h2>${bl.name}</h2><p class="step-intro">${bl.intro}</p>`;
+    for(let k=0;k<3;k++){const qi=bi*3+k, q=Q[qi];
+      h+=`<fieldset class="q"><legend><span class="n">${qi+1}.</span>${q[0]}</legend><div class="opts">`+
+      q[1].map((t,vi)=>`<label class="opt"><input type="radio" name="q${qi}" id="q${qi}_${vi+1}" value="${vi+1}" ${state.a[qi]===vi+1?"checked":""}><span class="num">${vi+1}</span><span class="txt">${t}</span></label>`).join("")+`</div></fieldset>`;}
+    host.innerHTML=h;
+    host.querySelectorAll('input[type=radio]').forEach(r=>r.addEventListener("change",()=>{state.a[+r.name.slice(1)]=+r.value;}));
+  }
+  $("progress").scrollIntoView({block:"start",behavior:"smooth"});
+}
+
+function readId(){const i=state.id;i.nome=$("i_nome").value.trim();i.email=$("i_email").value.trim();i.empresa=$("i_empresa").value.trim();i.cidade=$("i_cidade").value.trim();i.fat=$("i_fat").value;i.fdc=$("i_fdc").value;i.lgpd=$("i_lgpd").checked;}
+function validate(){
+  const s=state.step;
+  if(s===0){readId();const i=state.id;
+    if(!i.nome||!i.empresa) return "Informe nome, cargo e empresa.";
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(i.email)) return "Informe um e-mail válido para receber o resultado.";
+    if(!i.fat||!i.fdc) return "Responda às perguntas sobre faturamento e programa FDC.";
+    if(!i.lgpd) return "Para continuar, marque a autorização de uso dos dados.";
+    return "";}
+  const bi=s-1; const miss=[0,1,2].filter(k=>!state.a[bi*3+k]).map(k=>bi*3+k+1);
+  return miss.length?`Responda à pergunta ${miss.join(" e ")} para continuar.`:"";
+}
+function scores(){const bs=BLOCKS.map((_,bi)=>{const q=[0,1,2].map(k=>state.a[bi*3+k]);return (q[0]*3+q[1]*3+q[2]*4)/10;});
+  const avg=bs.reduce((x,y)=>x+y,0)/5; const ix=Math.round((avg-1)/4*100); const L=LEVELS.find(l=>ix<=l[0])||LEVELS[4];
+  const weak=bs.indexOf(Math.min(...bs)); return {bs,ix,L,weak};}
+
+function radar(bs,weak){
+  const cx=170,cy=158,R=108,n=5;const pt=(i,r)=>{const a=-Math.PI/2+i*2*Math.PI/n;return [cx+r*Math.cos(a),cy+r*Math.sin(a)]};
+  let g="";for(let lv=1;lv<=5;lv++){g+=`<polygon points="${[...Array(n)].map((_,i)=>pt(i,R*lv/5).join(",")).join(" ")}" fill="none" stroke="var(--line)"/>`;}
+  for(let i=0;i<n;i++){const [x,y]=pt(i,R);g+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--line)"/>`;}
+  g+=`<polygon points="${bs.map((s,i)=>pt(i,R*s/5).join(",")).join(" ")}" fill="var(--accent)" fill-opacity=".2" stroke="var(--accent)" stroke-width="2"/>`;
+  bs.forEach((s,i)=>{const [x,y]=pt(i,R*s/5);g+=`<circle cx="${x}" cy="${y}" r="4.5" fill="${i===weak?'var(--warn)':'var(--accent)'}"/>`;
+    const [lx,ly]=pt(i,R+22);const an=Math.abs(lx-cx)<8?"middle":(lx>cx?"start":"end");const lab=i===4?"Inovação e Tec.":BLOCKS[i].name;
+    g+=`<text x="${lx}" y="${ly+4}" text-anchor="${an}" font-size="12" fill="var(--muted)" font-family="Public Sans, Arial, sans-serif">${lab}</text>`;});
+  $("radar").innerHTML=g;
+}
+
+async function finish(){
+  const r=scores();
+  $("form").hidden=true;$("fill").style.width="100%";$("stepName").textContent="Resultado";$("stepCount").textContent="Concluído";
+  $("rIdx").innerHTML=`${r.ix}<small> /100</small>`;$("rLvl").textContent=r.L[1];$("rLvlTxt").textContent=r.L[2];
+  radar(r.bs,r.weak);
+  $("bars").innerHTML=r.bs.map((s,i)=>`<div class="bar ${i===r.weak?'weak':''}"><div class="row"><span>${BLOCKS[i].name}</span><b>${s.toFixed(1).replace(".",",")}</b></div><div class="t"><div class="v" style="width:${s/5*100}%"></div></div></div>`).join("");
+  $("rWeak").innerHTML=`O bloco que mais trava o crescimento hoje é <strong>${BLOCKS[r.weak].name}</strong>: ${BLOCKS[r.weak].frase}`;
+  if(CONFIG.agendaUrl){$("cta").href=CONFIG.agendaUrl;$("cta").hidden=false;}
+  $("result").hidden=false;$("result").scrollIntoView({block:"start",behavior:"smooth"});
+  const payload={...state.id,respostas:state.a,blocos:Object.fromEntries(BLOCKS.map((b,i)=>[b.id,+r.bs[i].toFixed(2)])),indice:r.ix,nivel:r.L[1],elo:BLOCKS[r.weak].name,website:$("website").value,enviadoEm:new Date().toISOString()};
+  if(!CONFIG.endpoint){$("sendNote").textContent="Modo de prévia: as respostas não foram enviadas.";return;}
+  try{await fetch(CONFIG.endpoint,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
+    $("sendNote").textContent=`Resultado registrado. Enviamos um resumo para ${state.id.email}.`;}
+  catch(e){$("sendNote").textContent="Não foi possível registrar agora. Verifique a conexão e recarregue a página para enviar de novo.";}
+}
+
+$("form").addEventListener("submit",e=>{e.preventDefault();const m=validate();if(m){$("err").textContent=m;$("err").hidden=false;return;}
+  if(state.step===TOTAL-1){$("next").disabled=true;finish();return;} state.step++;renderStep();});
+$("back").addEventListener("click",()=>{if(state.step===0)return;state.step--;renderStep();});
+renderStep();
+</script>
+
+</body>
+</html>
