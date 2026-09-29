@@ -47,13 +47,14 @@ h2{font-family:var(--display);font-weight:500;font-size:30px;margin:0;line-heigh
 .q legend{font-weight:600;font-size:17px;padding:0;margin-bottom:10px;line-height:1.4}
 .q legend .n{color:var(--accent);font-variant-numeric:tabular-nums;margin-right:6px}
 .opts{display:flex;flex-direction:column;gap:8px}
-.opt{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start;border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer;background:var(--surface)}
+.opt{display:grid;grid-template-columns:20px minmax(0,1fr);gap:12px;align-items:start;border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer;background:var(--surface)}
 .opt:hover{border-color:var(--accent)}
 .opt input{position:absolute;opacity:0;pointer-events:none}
-.opt .num{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:13px;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums}
+.opt .num{width:18px;height:18px;margin-top:3px;border-radius:50%;border:1.5px solid var(--muted);display:grid;place-items:center}
 .opt .txt{font-size:15px}
 .opt:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
-.opt:has(input:checked) .num{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.opt:has(input:checked) .num{border-color:var(--accent)}
+.opt:has(input:checked) .num::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--accent)}
 .opt:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
 .fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 @media (max-width:560px){.fields{grid-template-columns:minmax(0,1fr)}}
@@ -202,7 +203,7 @@ function renderStep(){
       <label class="f">E-mail<input type="email" id="i_email" autocomplete="email" value="${esc(i.email)}"></label>
       <label class="f">Empresa<input type="text" id="i_empresa" autocomplete="organization" value="${esc(i.empresa)}"></label>
       <label class="f">Cidade<input type="text" id="i_cidade" value="${esc(i.cidade)}"></label>
-      <label class="f">Faturamento anual<select id="i_fat">${["","Até R$ 10 milhões","R$ 10 a 50 milhões","R$ 50 a 150 milhões","Acima de R$ 150 milhões"].map(o=>`<option value="${o}" ${o===i.fat?"selected":""}>${o||"Selecione"}</option>`).join("")}</select></label>
+      <label class="f">Número de funcionários<select id="i_fat">${["","Até 20 funcionários","21 a 100 funcionários","101 a 300 funcionários","Acima de 300 funcionários"].map(o=>`<option value="${o}" ${o===i.fat?"selected":""}>${o||"Selecione"}</option>`).join("")}</select></label>
       <label class="f">Nos últimos três anos, sua empresa participou de algum programa da Fundação Dom Cabral conduzido por Leonardo Mattos?<select id="i_fdc">${["","Não","Sim"].map(o=>`<option value="${o}" ${o===i.fdc?"selected":""}>${o||"Selecione"}</option>`).join("")}</select></label>
     </div>
     <p class="privacy">Seus dados são usados apenas para gerar o resultado, enviar o parecer e agendar a conversa sobre ele. Ficam guardados pela Int.Co por até 24 meses e não são compartilhados com terceiros. Para corrigir ou excluir seus dados, responda ao e-mail do resultado.</p>
@@ -214,7 +215,7 @@ function renderStep(){
     let h=`<h2>${bl.name}</h2><p class="step-intro">${bl.intro}</p>`;
     for(let k=0;k<3;k++){const qi=bi*3+k, q=Q[qi];
       h+=`<fieldset class="q"><legend><span class="n">${qi+1}.</span>${q[0]}</legend><div class="opts">`+
-      q[1].map((t,vi)=>`<label class="opt"><input type="radio" name="q${qi}" id="q${qi}_${vi+1}" value="${vi+1}" ${state.a[qi]===vi+1?"checked":""}><span class="num">${vi+1}</span><span class="txt">${t}</span></label>`).join("")+`</div></fieldset>`;}
+      q[1].map((t,vi)=>`<label class="opt"><input type="radio" name="q${qi}" id="q${qi}_${vi+1}" value="${vi+1}" ${state.a[qi]===vi+1?"checked":""}><span class="num" aria-hidden="true"></span><span class="txt">${t}</span></label>`).join("")+`</div></fieldset>`;}
     host.innerHTML=h;
     host.querySelectorAll('input[type=radio]').forEach(r=>r.addEventListener("change",()=>{state.a[+r.name.slice(1)]=+r.value;}));
   }
@@ -227,7 +228,7 @@ function validate(){
   if(s===0){readId();const i=state.id;
     if(!i.nome||!i.empresa) return "Informe nome, cargo e empresa.";
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(i.email)) return "Informe um e-mail válido para receber o resultado.";
-    if(!i.fat||!i.fdc) return "Responda às perguntas sobre faturamento e programa FDC.";
+    if(!i.fat||!i.fdc) return "Responda às perguntas sobre número de funcionários e programa FDC.";
     if(!i.lgpd) return "Para continuar, marque a autorização de uso dos dados.";
     return "";}
   const bi=s-1; const miss=[0,1,2].filter(k=>!state.a[bi*3+k]).map(k=>bi*3+k+1);
